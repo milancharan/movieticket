@@ -40,10 +40,9 @@ function App() {
         `disabled`
       )
     }
-
-    const countSeatsSelected = [...seatsSelected, seat]
-    setSeatsSelected(countSeatsSelected)
-    countAmount(countSeatsSelected)
+    
+    setSeatsSelected([...seatsSelected, seat])
+    countAmount([...seatsSelected, seat])
     // countAmountToBePaid()
     // countTax()
 
@@ -58,11 +57,16 @@ function App() {
   // }, [seatsSelected])
 
   const countAmount = (seats) => {
-    const seatsRow = seats[0].row
+    const seatsRow = seats[seats.length-1].row
+    // console.log(seatsRow);
+    // console.log(seats.seatNumber);
+    // console.log(seats);
     const basicPrice = Movies.BasicPrice
-    const seatsSelectedCount = seats.length 
-    const totalAmount = (seatsRow > 3 ? (basicPrice+(seatsRow-3)*50) : basicPrice) * seatsSelectedCount  
+    // console.log(basicPrice);
+    // const seatsSelectedCount = seats.length 
+    const totalAmount = (seatsRow > 3 ? (basicPrice+(seatsRow-3)*50) : basicPrice) + amount  
     setAmount(totalAmount)
+    // console.log(totalAmount);
   }
 
   // const countTax = () => {
@@ -98,7 +102,7 @@ function App() {
                 const seatNumber = row.Start + dataIndex;
                 const Booked = row.AlreadyBooked.includes(seatNumber)
                 const Selected = seatsSelected.find(s => s.row===rowIndex+1 && s.seatNumber===seatNumber)
-                const seatsColor = Booked ? {backgroundColor: "lightgrey"} : (Selected ? {backgroundColor: "gray"} : {backgroundColor: "white"})
+                const seatsColor = Booked ? {backgroundColor: "lightgrey"} : (Selected ? {backgroundColor: "green"} : {backgroundColor: "white"})
                 return (
                   <td style={seatsColor} onClick={()=>manageSeatClick(rowIndex+1, seatNumber)}>{seatNumber}</td>
                 )
