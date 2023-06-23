@@ -33,9 +33,9 @@ function App() {
   const manageSeatClick = (row, seatNumber) => {
     const seat = {row, seatNumber}
     const Booked = Movies.Rows[row-1].AlreadyBooked.includes(seatNumber)
-    const Selected = seatsSelected.find(s => s.row === row && s.map((i) => (i ===seatNumber)))
+    // const Selected = seatsSelected.find(s => s.row === row && s.map((i) => (i.seatNumber ===seatNumber)))
 
-    if(Booked || Selected) {
+    if(Booked ) {
       return (
         `disabled`
       )
