@@ -4,45 +4,57 @@ import React, { useEffect, useState } from 'react';
 
 function App() {
 
-  const [ seatsSelected, setSeatsSelected ] = useState([])
+  const [seatsSelected, setSeatsSelected] = useState([])
   const [tax, setTax] = useState(0)
-  const [ amount, setAmount ] = useState(0)
-  const [ amountToBePaid, setAmountToBePaid ] = useState(0)
+  const [amount, setAmount] = useState(0)
+  const [amountToBePaid, setAmountToBePaid] = useState(0)
 
   // useEffect(() => {
   //   const manageSeatClick = (row, seatNumber) => {
   //     const seat = {row, seatNumber}
   //     const Booked = Movies.Rows[row-1].AlreadyBooked.includes(seatNumber)
   //     const Selected = seatsSelected.find(s => s.row === row && s.seatNumber === seatNumber)
-  
+
   //     if(Booked || Selected) {
   //       return (
   //         `Disabled`
   //       )
   //     }
-  
+
   //     const countSeatsSelected = [...seatsSelected, seat]
   //     setSeatsSelected(countSeatsSelected)
   //     countAmount(countSeatsSelected)
   //     countAmountToBePaid(countSeatsSelected)
   //     countTax(countSeatsSelected)
-  
+
   //   }
   // },[])
 
-  const manageSeatClick = (row, seatNumber) => {
-    const seat = {row, seatNumber}
-    const Booked = Movies.Rows[row-1].AlreadyBooked.includes(seatNumber)
-    // const Selected = seatsSelected.find(s => s.row === row && s.map((i) => (i.seatNumber ===seatNumber)))
+  // var array = []
 
-    if(Booked ) {
-      return (
-        `disabled`
-      )
+  const manageSeatClick = (row, seatNumber) => {
+    var array = seatsSelected.filter((seats)=>seats.seatNumber==seatNumber)
+    // console.log(seatsSelected.find((seats)=>seats.seatNumber==seatNumber),"hello");
+    if (array.length != 0) {
+      
+      return `disabled`
+    } else {
+      const seat = { row, seatNumber }
+      const Booked = Movies.Rows[row - 1].AlreadyBooked.includes(seatNumber)
+      // const Selected = seatsSelected.find(s => s.row === row && s.map((i) => (i.seatNumber ===seatNumber)))
+      // console.log(seatsSelected);
+      if (Booked) {
+        return (
+          `disabled`
+        )
+      }
+
+      setSeatsSelected([...seatsSelected, seat])
+      countAmount([...seatsSelected, seat])
+      // array.push(seatNumber)
+
     }
-    
-    setSeatsSelected([...seatsSelected, seat])
-    countAmount([...seatsSelected, seat])
+    // console.log(array);
     // countAmountToBePaid()
     // countTax()
 
@@ -57,37 +69,42 @@ function App() {
   // }, [seatsSelected])
 
   const countAmount = (seats) => {
-    const seatsRow = seats[seats.length-1].row
+    const seatsRow = seats[seats.length - 1].row
     // console.log(seatsRow);
     // console.log(seats.seatNumber);
     // console.log(seats);
     const basicPrice = Movies.BasicPrice
     // console.log(basicPrice);
     // const seatsSelectedCount = seats.length 
-    const totalAmount = (seatsRow > 3 ? (basicPrice+(seatsRow-3)*50) : basicPrice) + amount  
+    const totalAmount = (seatsRow > 3 ? (basicPrice + (seatsRow - 3) * 50) : basicPrice) + amount
     setAmount(totalAmount)
+    // if(seats.seatNumber){
+    //   return (
+    //     `disabled`
+    //   )
+    // }
     // console.log(totalAmount);
   }
 
   // const countTax = () => {
-    // const totalTax = amount * 0.2 
-    // setTax(totalTax)
+  // const totalTax = amount * 0.2 
+  // setTax(totalTax)
   // } 
 
   // const countAmountToBePaid = () => {
-    // const totalAmountToBePaid = amount + tax
-    // setAmountToBePaid(totalAmountToBePaid)
+  // const totalAmountToBePaid = amount + tax
+  // setAmountToBePaid(totalAmountToBePaid)
   // }
 
-  useEffect(() =>{
-    const totalTax = amount * 0.2 
+  useEffect(() => {
+    const totalTax = amount * 0.2
     setTax(totalTax)
-  },[amount])
+  }, [amount])
 
-  useEffect(() =>{
+  useEffect(() => {
     const totalAmountToBePaid = amount + tax
     setAmountToBePaid(totalAmountToBePaid)
-  },[tax])
+  }, [tax])
 
 
   return (
@@ -100,11 +117,12 @@ function App() {
             <tr>
               {Array(row.End - row.Start + 1).fill().map((data, dataIndex) => {
                 const seatNumber = row.Start + dataIndex;
+                // console.log(seatNumber);
                 const Booked = row.AlreadyBooked.includes(seatNumber)
-                const Selected = seatsSelected.find(s => s.row===rowIndex+1 && s.seatNumber===seatNumber)
-                const seatsColor = Booked ? {backgroundColor: "lightgrey"} : (Selected ? {backgroundColor: "green"} : {backgroundColor: "white"})
+                const Selected = seatsSelected.find(s => s.row === rowIndex + 1 && s.seatNumber === seatNumber)
+                const seatsColor = Booked ? { backgroundColor: "lightgrey" } : (Selected ? { backgroundColor: "green" } : { backgroundColor: "white" })
                 return (
-                  <td style={seatsColor} onClick={()=>manageSeatClick(rowIndex+1, seatNumber)}>{seatNumber}</td>
+                  <td style={seatsColor} onClick={() => manageSeatClick(rowIndex + 1, seatNumber)}>{seatNumber}</td>
                 )
               })}
             </tr>
@@ -126,3 +144,26 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
